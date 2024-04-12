@@ -1,4 +1,3 @@
-
 drop database if exists online_test;
 create database if not exists online_test;
 
@@ -11,8 +10,7 @@ create table Admin(ID varchar(50) primary key, Name varchar(50), Password varcha
 
 create table Teacher(ID varchar(50) primary key, Name varchar(50), Password varchar(50), Branch varchar(50));
 
-create table Test(TestID varchar(50) primary key,  TeacherID varchar(50), StartDateTime TIME,  EndDateTime TIME ,  Questions varchar(500), Answers varchar(500), Description varchar(500), Accepted bool);
-
+create table Test(TestID varchar(50) primary key,  TeacherID varchar(50), StartDateTime DATETIME,  EndDateTime DATETIME ,  Questions varchar(500), Answers varchar(500), Description varchar(500), Accepted bool);
 
 CREATE TABLE Student_Test (
     SRN VARCHAR(50),
@@ -59,8 +57,8 @@ VALUES
 -- Test table
 INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Questions, Answers, Description, Accepted, Teacher_ID, Admin_ID)
 VALUES
-    ('TEST001', 'T001', '08:00:00', '10:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 1', true, 'T001', 'AD001'),
-    ('TEST002', 'T002', '10:00:00', '12:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 2', false, 'T002', 'AD002');
+    ('TEST001', 'T001', '2024-04-12 08:00:00', '2024-04-12 10:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 1', true, 'T001', 'AD001'),
+    ('TEST002', 'T002', '2024-04-12 10:00:00', '2024-04-12 12:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 2', false, 'T002', 'AD002');
 
 -- Student_Test table
 INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
@@ -75,8 +73,8 @@ VALUES
 -- Test table (continued)
 INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Questions, Answers, Description, Accepted, Teacher_ID, Admin_ID)
 VALUES
-    ('TEST003', 'T001', '09:00:00', '11:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 3', true, 'T001', 'AD001'),
-    ('TEST004', 'T002', '11:00:00', '13:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 4', false, 'T002', 'AD002');
+    ('TEST003', 'T001', '2024-04-12 09:00:00', '2024-04-12 11:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 3', true, 'T001', 'AD001'),
+    ('TEST004', 'T002', '2024-04-12 11:00:00', '2024-04-12 13:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 4', false, 'T002', 'AD002');
 
 -- Student_Test table (continued)
 INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
@@ -87,4 +85,3 @@ VALUES
     ('SRN001', 'TEST004', 92, 'Answer 1, Answer 2, Answer 3'),
     ('SRN002', 'TEST004', 88, 'Answer 1, Answer 2, Answer 3'),
     ('SRN003', 'TEST004', 90, 'Answer 1, Answer 2, Answer 3');
-
