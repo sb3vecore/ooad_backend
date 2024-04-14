@@ -15,7 +15,6 @@ public class Admin {
         this.name = name;
         DatabaseConnection dbc = DatabaseConnection.getConnection();
         Connection connection = dbc.connection;        
-        System.out.println("Nicee");
     }
 
     public int getAdminId() {

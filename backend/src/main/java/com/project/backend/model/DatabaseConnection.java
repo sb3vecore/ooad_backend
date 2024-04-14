@@ -1,12 +1,8 @@
 package com.project.backend.model;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.io.IOException;
@@ -16,7 +12,7 @@ import java.util.Properties;
 @Component
 public class DatabaseConnection {
 
-    private static DatabaseConnection instance; 
+    private static DatabaseConnection instance;
     public Connection connection;
 
     private DatabaseConnection() {

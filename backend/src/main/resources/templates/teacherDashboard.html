@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th = "https://www.thymeleaf.org">
+
+    <head>
+
+    </head>
+
+    <body>
+        <form method = "GET" action = "http://localhost:8080/uploadTest">
+            <input style = "display: none;" type = "text" name = "teacherId" th:value = "${teacherId}" />
+            <input type = "submit" value = "Upload Test" />
+        </form>
+    </body>
+
+</html>

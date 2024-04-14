@@ -10,7 +10,35 @@ create table Admin(ID varchar(50) primary key, Name varchar(50), Password varcha
 
 create table Teacher(ID varchar(50) primary key, Name varchar(50), Password varchar(50), Branch varchar(50));
 
-create table Test(TestID varchar(50) primary key,  TeacherID varchar(50), StartDateTime DATETIME,  EndDateTime DATETIME ,  Questions varchar(500), Answers varchar(500), Description varchar(500), Accepted bool);
+create table Test (
+    TestID varchar(50) primary key,
+    TeacherID varchar(50),
+    Subject VARCHAR(50),
+    Difficulty ENUM("Easy", "Medium", "Hard"),
+    StartDateTime DATETIME,
+    EndDateTime DATETIME,
+    Description varchar(500),
+    Accepted bool
+);
+
+CREATE TABLE Questions (
+    questionID VARCHAR(50) PRIMARY KEY,
+    question VARCHAR(100),
+    option1 VARCHAR(100),
+    option2 VARCHAR(100),
+    option3 VARCHAR(100),
+    option4 VARCHAR(100),
+    correct_option ENUM("1", "2", "3", "4"),
+    marks INT
+);
+
+CREATE TABLE Test_Questions (
+    testId VARCHAR(50),
+    questionId VARCHAR(50),
+    PRIMARY KEY (testId, questionId),
+    FOREIGN KEY (testId) REFERENCES Test(TestID),
+    FOREIGN KEY (questionId) REFERENCES Questions(questionID)
+);
 
 CREATE TABLE Student_Test (
     SRN VARCHAR(50),
@@ -22,13 +50,8 @@ CREATE TABLE Student_Test (
 
  -- Altering tables
 
-alter table Test add column Teacher_ID varchar(50);
-alter table Test add foreign key (Teacher_ID) references Teacher(ID);
+alter table Test add foreign key (TeacherID) references Teacher(ID);
  
-alter table Test add column Admin_ID varchar(50);
-alter table Test add foreign key (Admin_ID) references Admin(ID);
-alter table Test add foreign key (Teacher_ID) references Teacher(ID);
-
 alter table Student_Test add foreign key (SRN) references Student(SRN);
 alter table Student_Test add foreign key (TestID) references Test(TestID);
 
@@ -55,10 +78,10 @@ VALUES
     ('T002', 'Teacher2', 'teacherpass2', 'Electrical Engineering');
 
 -- Test table
-INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Questions, Answers, Description, Accepted, Teacher_ID, Admin_ID)
+INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Description, Accepted)
 VALUES
-    ('TEST001', 'T001', '2024-04-12 08:00:00', '2024-04-12 10:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 1', true, 'T001', 'AD001'),
-    ('TEST002', 'T002', '2024-04-12 10:00:00', '2024-04-12 12:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 2', false, 'T002', 'AD002');
+    ('TEST001', 'T001', '2024-04-12 08:00:00', '2024-04-12 10:00:00', 'Test description 1', true),
+    ('TEST002', 'T002', '2024-04-12 10:00:00', '2024-04-12 12:00:00', 'Test description 2', false);
 
 -- Student_Test table
 INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
@@ -71,10 +94,10 @@ VALUES
     ('SRN003', 'TEST002', 95, 'Answer 1, Answer 2, Answer 3');
 
 -- Test table (continued)
-INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Questions, Answers, Description, Accepted, Teacher_ID, Admin_ID)
+INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Description, Accepted)
 VALUES
-    ('TEST003', 'T001', '2024-04-12 09:00:00', '2024-04-12 11:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 3', true, 'T001', 'AD001'),
-    ('TEST004', 'T002', '2024-04-12 11:00:00', '2024-04-12 13:00:00', 'Question 1, Question 2, Question 3', 'Answer 1, Answer 2, Answer 3', 'Test description 4', false, 'T002', 'AD002');
+    ('TEST003', 'T001', '2024-04-12 09:00:00', '2024-04-12 11:00:00', 'Test description 3', true),
+    ('TEST004', 'T002', '2024-04-12 11:00:00', '2024-04-12 13:00:00', 'Test description 4', false);
 
 -- Student_Test table (continued)
 INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
