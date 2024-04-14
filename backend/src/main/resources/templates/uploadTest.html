@@ -13,6 +13,11 @@
             const options = []
             const answers = []
 
+            const handleBackClick = (event) => {
+                const parameters = new URLSearchParams(window.location.search)
+                window.location.assign("http://localhost:8080/teacherDashboard?teacherId=" + parameters.get("teacherId"))
+            }
+
             const handleAdd = (event) => {
                 const testElement = document.getElementById("test")
                 const question = document.getElementById("question").value
@@ -80,6 +85,9 @@
     </head>
 
     <body>
+        <div>
+            <input type = "button" value = "Back" onclick = "handleBackClick(event)" />
+        </div>
         <div>
             Subject: <input id = "subject" type = "text" placeholder = "Enter the subject" /> <br />
             Difficulty: <input id = "difficulty" type = "text" placeholder = "Enter difficulty" /> <br />
