@@ -47,13 +47,14 @@ public class TeacherController {
         ArrayList<String> question = (ArrayList<String>)body.get("questions");
         ArrayList<String> answers = (ArrayList<String>)body.get("answers");
         ArrayList<ArrayList<String>> options = (ArrayList<ArrayList<String>>)body.get("options");
+        ArrayList<String> marks = (ArrayList<String>)body.get("marks");
         
         for(int i = 0; i < question.size(); i++) {
-            questions.add(new Question(question.get(i), answers.get(i), 4, options.get(i)));
+            questions.add(new Question(question.get(i), answers.get(i), Integer.parseInt(marks.get(i)), options.get(i)));
         }
         
         Test test = new Test(
-            "T69",
+            (String)body.get("teacherId"),
             (String)body.get("subject"),
             (String)body.get("difficulty"),
             (String)body.get("startDateTime"),

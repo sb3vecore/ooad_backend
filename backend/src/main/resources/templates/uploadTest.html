@@ -2,6 +2,59 @@
 <html xmlns:th = "https://www.thymeleaf.org">
 
     <head>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+
+        <style>
+
+            p {
+                margin: 5px;
+                padding: 0px;
+            }
+
+            h3 {
+                margin-bottom: 0px;
+            }
+
+            .outer {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px;
+            }
+
+            .testDetails {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 90%;
+                background-color: rgb(210, 210, 210);
+                padding: 15px;
+                border: 1px solid rgb(171, 162, 162);
+                border-radius: 5px;
+            }
+
+            .detailsRow {
+                display: flex;
+                width: 100%;
+            }
+
+            .detailsItem {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                padding: 0px 10px 0px 10px;
+            }
+
+            .testContent {
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                margin-top: 10px;
+                padding: 0px 30px 0px 30px;
+            }
+
+        </style>
+
         <script>
             var count = 0
             var subject = ""
@@ -12,10 +65,29 @@
             const questions = []
             const options = []
             const answers = []
+            const marks = []
 
             const handleBackClick = (event) => {
                 const parameters = new URLSearchParams(window.location.search)
                 window.location.assign("http://localhost:8080/teacherDashboard?teacherId=" + parameters.get("teacherId"))
+            }
+
+            const handleDelete = (event, index) => {
+                questions.splice(index, 1)
+                options.splice(index, 1)
+                answers.splice(index, 1)
+
+                document.getElementById("test").innerHTML = questions.map((question, index) => 
+                    `<div>
+                        <h3>${index + 1}) ${question}</h3>
+                        <p>a) ${options[index][0]}</p>
+                        <p>b) ${options[index][1]}</p>
+                        <p>c) ${options[index][2]}</p>
+                        <p>d) ${options[index][3]}</p>
+                        <p>Marks: ${marks[index]}</p>
+                        <input style = "margin-bottom: 10px;" type = "button" value = "Delete" onclick = "handleDelete(event, ${index})" />
+                    </div>`
+                ).join("")
             }
 
             const handleAdd = (event) => {
@@ -26,6 +98,7 @@
                 const option3 = document.getElementById("option3").value
                 const option4 = document.getElementById("option4").value
                 const correctOption = document.getElementById("correctOption").value
+                const questionMarks = document.getElementById("marks").value
                 
                 count += 1
                 
@@ -37,13 +110,27 @@
                     option4
                 ])
                 answers.push(correctOption)
+                marks.push(questionMarks)
 
-                testElement.innerText += count + ") " 
-                testElement.innerText += question + "\n"
-                testElement.innerText += "a) " + option1 + "\n"
-                testElement.innerText += "b) " + option2 + "\n"
-                testElement.innerText += "c) " + option3 + "\n"
-                testElement.innerText += "d) " + option4 + "\n\n"
+                testElement.innerHTML = questions.map((question, index) => 
+                    `<div>
+                        <h3>${index + 1}) ${question}</h3>
+                        <p>a) ${options[index][0]}</p>
+                        <p>b) ${options[index][1]}</p>
+                        <p>c) ${options[index][2]}</p>
+                        <p>d) ${options[index][3]}</p>
+                        <p>Marks: ${marks[index]}</p>
+                        <input style = "margin-bottom: 10px;" type = "button" value = "Delete" onclick = "handleDelete(event, ${index})" />
+                    </div>`
+                ).join("")
+
+                document.getElementById("question").value = ""
+                document.getElementById("option1").value = ""
+                document.getElementById("option2").value = ""
+                document.getElementById("option3").value = ""
+                document.getElementById("option4").value = ""
+                document.getElementById("correctOption").value = ""
+                document.getElementById("marks").value = ""
 
                 // const payloadElement = document.getElementById("payload")
                 // const value = JSON.stringify({
@@ -62,8 +149,12 @@
                 endDateTime = document.getElementById("end").value
                 description = document.getElementById("description").value
 
+                const parameters = new URLSearchParams(window.location.search)
+                const teacherId = parameters.get("teacherId")
+
                 const request = new XMLHttpRequest()
                 const body = JSON.stringify({
+                    "teacherId": teacherId,
                     "subject": subject,
                     "difficulty": difficulty,
                     "startDateTime": startDateTime,
@@ -71,54 +162,88 @@
                     "description": description, 
                     "questions": questions,
                     "options": options,
-                    "answers": answers
+                    "answers": answers,
+                    "marks": marks
                 })
 
                 request.open("POST", "http://localhost:8080/submitTest")
                 request.setRequestHeader("Content-Type", "application/json")
                 request.send(body)
 
-                const parameters = new URLSearchParams(window.location.search)
-                window.location.assign("http://localhost:8080/teacherDashboard?teacherId=" + parameters.get("teacherId"))
+                window.location.assign("http://localhost:8080/teacherDashboard?teacherId=" + teacherId)
             }
         </script>
     </head>
 
     <body>
+
         <div>
             <input type = "button" value = "Back" onclick = "handleBackClick(event)" />
         </div>
-        <div>
-            Subject: <input id = "subject" type = "text" placeholder = "Enter the subject" /> <br />
-            Difficulty: <input id = "difficulty" type = "text" placeholder = "Enter difficulty" /> <br />
-            Start: <input id = "start" type = "text" placeholder = "Start date and time" /> <br />
-            End: <input id = "end" type = "text" placeholder = "End date and time" /> <br />
-            Description: <input id = "description" type = "text" placeholder = "Enter the description" /> <br />
-        </div>
-        <div>
-            <p id = "test">
 
-            </p>
-        </div>
-        <div>
-            <input id = "question" type = "text" placeholder = "Enter the question" />
-            <br />
-            <span>a) </span> <input id = "option1" type = "text" placeholder = "Enter option A" />
-            <br />
-            <span>b) </span> <input id = "option2" type = "text" placeholder = "Enter option B" />
-            <br />
-            <span>c) </span> <input id = "option3" type = "text" placeholder = "Enter option C" />
-            <br />
-            <span>d) </span> <input id = "option4" type = "text" placeholder = "Enter option D" />
-            <br />
-            <span>Correct Option: </span> <input id = "correctOption" type = "text" placeholder = "Enter the correct option" />
-            <input type = "button" value = "Add" onclick = "handleAdd(event)" />
-            <br />
-            <!-- <form enctype = "text/plain" method = "POST" action = "http://localhost:8080/submitTest">
-                <input id = "payload" type = "text" style = "display: none;" name = "data" />
-                <input type = "submit" />
-            </form> -->
-            <input type = "button" value = "Submit" onclick = "handleSubmit(event)" />
+        <div class = "outer">
+
+            <div class = "testDetails">
+                <div class = "detailsRow">
+                    <div class = "detailsItem">
+                        <label for = "subject" class = "form-label">Subject</label>
+                        <input class = "form-control" id = "subject" type = "text" placeholder = "Enter the subject" />
+                    </div>
+                    <div class = "detailsItem">
+                        <label for = "difficulty" class = "form-label">Difficulty</label>
+                        <input class = "form-control" id = "difficulty" type = "text" placeholder = "Enter difficulty" />
+                    </div>
+                </div>
+                <br />
+                <div class = "detailsRow">
+                    <div class = "detailsItem">
+                        <label for = "start" class = "form-label">Start Date and Time</label>
+                        <input class = "form-control" id = "start" type = "text" placeholder = "Start date and time" />
+                    </div>
+                    <div class = "detailsItem">
+                        <label for = "start" class = "form-label">End Date and Time</label>
+                        <input class = "form-control" id = "end" type = "text" placeholder = "End date and time" />
+                    </div>
+                </div>
+                <br />
+                <div class = "detailsRow">
+                    <div class = "detailsItem">
+                        <label for = "description" class = "form-label">Description</label>
+                        <textarea rows = "5" class = "form-control" id = "description" placeholder = "Enter the description" ></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "testContent">
+                <div id = "test" style = "margin-top: 30px;">
+
+                </div>
+                
+                <div style = "margin-top: 20px">
+                    <span>Question: </span> <input class = "form-control" id = "question" type = "text" placeholder = "Enter the question" />
+                    <br />
+                    <span>a) </span> <input class = "form-control" id = "option1" type = "text" placeholder = "Enter option A" />
+                    <br />
+                    <span>b) </span> <input class = "form-control" id = "option2" type = "text" placeholder = "Enter option B" />
+                    <br />
+                    <span>c) </span> <input class = "form-control" id = "option3" type = "text" placeholder = "Enter option C" />
+                    <br />
+                    <span>d) </span> <input class = "form-control" id = "option4" type = "text" placeholder = "Enter option D" />
+                    <br />
+                    <span>Correct Option: </span> <input class = "form-control" id = "correctOption" type = "text" placeholder = "Enter the correct option" />
+                    <br />
+                    <span>Marks: </span> <input id = "marks" type = "text" placeholder = "Enter marks" />
+                    <br />
+                    <input type = "button" value = "Add" onclick = "handleAdd(event)" />
+                    <br />
+                    <!-- <form enctype = "text/plain" method = "POST" action = "http://localhost:8080/submitTest">
+                        <input id = "payload" type = "text" style = "display: none;" name = "data" />
+                        <input type = "submit" />
+                    </form> -->
+                    <input type = "button" value = "Submit" onclick = "handleSubmit(event)" />
+                </div>
+
+            </div>
         </div>
     </body>
 

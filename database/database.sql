@@ -28,7 +28,7 @@ CREATE TABLE Questions (
     option2 VARCHAR(100),
     option3 VARCHAR(100),
     option4 VARCHAR(100),
-    correct_option ENUM("1", "2", "3", "4"),
+    correct_option ENUM("a", "b", "c", "d"),
     marks INT
 );
 
