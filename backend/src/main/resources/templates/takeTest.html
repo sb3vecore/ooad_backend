@@ -25,10 +25,43 @@
 
                 window.location.assign(`http://${window.location.host}/studentDashboard?SRN=${requestBody.SRN}`)
             }
+
+            const startTimer = (event, startDateTime, endDateTime) => {
+                const splitStartDateTime = startDateTime.split(" ")
+                const startDate = splitStartDateTime[0]
+                const startTime = splitStartDateTime[1]
+                const splitEndDateTime = endDateTime.split(" ")
+                const endDate = splitEndDateTime[0]
+                const endTime = splitEndDateTime[1]
+                
+                const splitStartTime = startTime.split(":")
+                const splitEndTime = endTime.split(":")
+
+                const totalStartSeconds = (splitStartTime[0] * 3600) + (splitStartTime[1] * 60) + (splitStartTime[2] * 1)
+                const totalEndSeconds = (splitEndTime[0] * 3600) + (splitEndTime[1] * 60) + (splitEndTime[2] * 1)
+
+                let testTime = totalEndSeconds - totalStartSeconds;
+                
+                const timer = setInterval(() => {
+                    if(testTime === 0) {
+                        handleSubmit()
+                    }
+                    const timerElement = document.getElementById("timer")
+                    let hours = Math.floor(testTime / 3600)
+                    let minutes = Math.floor((testTime % 3600) / 60)
+                    let seconds = (testTime % 3600) % 60
+                    timerElement.innerText = `${hours}:${minutes}:${seconds}`
+                    testTime--
+                }, 1000)
+            }
+
         </script>
     </head>
 
-    <body>
+    <body th:attr = "onload = |startTimer(event, '${test.getStartDateTime()}', '${test.getEndDateTime()}')|">
+        <div>
+            <h2 id = "timer"></h2>
+        </div>
         <div th:each = "question: ${test.getQuestionList()}">
             <p th:text = "${question.getQuestion()}" />
             <input onclick = "handleClick(event)" type = "radio" th:each = "option: ${question.getOptions()}" th:text = "${option}" th:value = "${question.getOptionName(option)}" th:name = "${question.getQuestionId()}" />
