@@ -166,11 +166,11 @@
                     "marks": marks
                 })
 
-                request.open("POST", "http://localhost:8080/submitTest")
+                request.open("POST", `http://${window.location.host}/submitTest`)
                 request.setRequestHeader("Content-Type", "application/json")
                 request.send(body)
 
-                window.location.assign("http://localhost:8080/teacherDashboard?teacherId=" + teacherId)
+                window.location.assign(`http://${window.location.host}/teacherDashboard?teacherId=${teacherId}`)
             }
         </script>
     </head>
