@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Previous Tests</title>
+</head>
+ <body>
+    <h1>Previous Tests</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Test Name</th>
+                <th>Marks Secured</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="test : ${tests}">
+                <td th:text="${test.testId}"></td>
+                <td th:text="${test.Subject}"></td>
+                <td th:text="${test.markssecured}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body> 
+</html>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.project.backend.model.Admin;
 import com.project.backend.model.Student;
@@ -82,15 +83,18 @@ public class HomeController {
 
 
     @PostMapping("/adminLogin")
-    public String loginAdmin(@RequestParam String adminId, @RequestParam String password,RedirectAttributes redirectAttributes,Model model){
-        // System.out.println(SRN+Password);
+    public String loginAdmin(@RequestParam String adminId, @RequestParam String password, RedirectAttributes redirectAttributes, Model model) {
         Admin adm = new Admin();
         String passFromDB = adm.login(adminId);
-        System.out.println(passFromDB);
-        // stu.login(SRN);
+    
         if (passFromDB.equals(password)) {
-            redirectAttributes.addAttribute("adminId", adminId);
-            return "redirect:/teacherDashboard";
+            // Build the redirect URL with adminId as a URL parameter
+            String redirectUrl = UriComponentsBuilder.fromPath("/adminDashboard")
+                    .queryParam("adminId", adminId)
+                    .toUriString();
+            
+            // Redirect to the constructed URL
+            return "redirect:" + redirectUrl;
         } else {
             model.addAttribute("error", "Incorrect AdminID or Password");
             return "adminLogin";

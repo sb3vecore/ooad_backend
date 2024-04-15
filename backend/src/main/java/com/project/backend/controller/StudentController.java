@@ -52,4 +52,13 @@ public class StudentController {
         return String.format("redirect:/studentDashboard?SRN=%s", body.get("SRN"));
     }
 
+    @GetMapping(path = "/viewPreviousTests")
+    String viewPreviousTests(@RequestParam String SRN, Model model) {
+        PrevTests prevTests = new PrevTests();
+        List<Map<String, Object>> tests = prevTests.retrieveAllTests(SRN);
+        model.addAttribute("tests", tests);
+        return "viewPreviousTests";
+    }
+
+
 }

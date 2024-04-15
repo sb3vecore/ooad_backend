@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th = "https://www.thymeleaf.org">
-    <head>
-        <script>
-            const handleTakeTest = (event) => {
-                const parameters = new URLSearchParams(window.location.search)
-                const SRN = parameters.get("SRN")
-                window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`)
-            }
-        </script>
-    </head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Dashboard</title>
+    <script>
+        const handleTakeTest = (event) => {
+            const parameters = new URLSearchParams(window.location.search);
+            const SRN = parameters.get("SRN");
+            window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`);
+        }
 
-    <body>
-        <div th:each = "test: ${tests}">
-            <!-- <p th:text = "${test.getTestId()}" /> -->
-            <p th:text = "${test.getSubject()}" />
-            <p th:text = "${test.getDifficulty()}" />
-            <p th:text = "${test.getStartDateTime()}" />
-            <p th:text = "${test.getEndDateTime()}" />
-            <p th:text = "${test.getDescription()}" />
-            <input th:id = "${test.getTestId()}" type = "button" value = "Take Test" onclick = "handleTakeTest(event)" />
-        </div>
-    </body>
+        const viewPreviousTests = () => {
+            const parameters = new URLSearchParams(window.location.search);
+            const SRN = parameters.get("SRN");
+            window.location.assign(`http://${window.location.host}/viewPreviousTests?SRN=${SRN}`);
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Dashboard</h1>
+    <div>
+        <input type="button" value="View Previous Tests" th:onclick="viewPreviousTests()">
+    </div>
+    <div th:each="test: ${tests}">
+        <!-- <h2 th:text="${test.subject}"></h2>
+        <p>Difficulty: <span th:text="${test.difficulty}"></span></p>
+        <p>Start Time: <span th:text="${test.startDateTime}"></span></p>
+        <p>End Time: <span th:text="${test.endDateTime}"></span></p>
+        <p th:text="${test.description}"></p>
+        <input type="button" value="Take Test" th:id="${test.testId}" th:onclick="handleTakeTest(event)"> -->
+    </div>
+</body>
 </html>
