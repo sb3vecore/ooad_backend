@@ -147,6 +147,20 @@ public class Admin {
         return "Works";
     }
 
+    public String acceptTest(String testId) {
+        try {
+            String query = "UPDATE Test SET accepted = true WHERE testId = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, testId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Success";
+    }
+
     public String getAdminId() {
         return this.adminId;
     }
