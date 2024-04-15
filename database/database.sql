@@ -94,14 +94,14 @@ VALUES
     ('TEST002', 'T002', '2024-04-12 10:00:00', '2024-04-12 12:00:00', 'Test description 2', false);
 
 -- Student_Test table
-INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
+INSERT INTO Student_Test (SRN, TestID, MarksSecured)
 VALUES
-    ('SRN001', 'TEST001', 80, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN002', 'TEST001', 75, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN003', 'TEST001', 70, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN001', 'TEST002', 85, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN002', 'TEST002', 90, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN003', 'TEST002', 95, 'Answer 1, Answer 2, Answer 3');
+    ('SRN001', 'TEST001', 80),
+    ('SRN002', 'TEST001', 75),
+    ('SRN003', 'TEST001', 70),
+    ('SRN001', 'TEST002', 85),
+    ('SRN002', 'TEST002', 90),
+    ('SRN003', 'TEST002', 95);
 
 -- Test table (continued)
 INSERT INTO Test (TestID, TeacherID, StartDateTime, EndDateTime, Description, Accepted)
@@ -110,11 +110,86 @@ VALUES
     ('TEST004', 'T002', '2024-04-12 11:00:00', '2024-04-12 13:00:00', 'Test description 4', false);
 
 -- Student_Test table (continued)
-INSERT INTO Student_Test (SRN, TestID, MarksSecured, MarkedAnswers)
+INSERT INTO Student_Test (SRN, TestID, MarksSecured)
 VALUES
-    ('SRN001', 'TEST003', 78, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN002', 'TEST003', 80, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN003', 'TEST003', 85, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN001', 'TEST004', 92, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN002', 'TEST004', 88, 'Answer 1, Answer 2, Answer 3'),
-    ('SRN003', 'TEST004', 90, 'Answer 1, Answer 2, Answer 3');
+    ('SRN001', 'TEST003', 78),
+    ('SRN002', 'TEST003', 80),
+    ('SRN003', 'TEST003', 85),
+    ('SRN001', 'TEST004', 92),
+    ('SRN002', 'TEST004', 88),
+    ('SRN003', 'TEST004', 90);
+
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q001', 'What is the entry point of a Java program?', 'main() method', 'start() method', 'run() method', 'init() method', 'a', 2);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q002', 'Which of the following is not an access modifier in Java?', 'public', 'private', 'protected', 'global', 'd', 1);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q003', 'What is the purpose of the "super" keyword in Java?', 'To call a constructor of the parent class', 'To call a method of the parent class', 'Both A and B', 'None of the above', 'c', 3);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q004', 'Which of the following is not a Java primitive data type?', 'boolean', 'char', 'string', 'double', 'c', 2);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q005', 'Which Java keyword is used to define a constant?', 'var', 'const', 'final', 'static', 'c', 1);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q006', 'What is the result of "9 + 3 * 2"?', '15', '18', '24', '12', 'a', 2);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q007', 'Which of the following is a valid way to create an object in Java?', 'ClassName obj = new ClassName();', 'ClassName obj = ClassName();', 'ClassName obj = new ClassName;', 'None of the above', 'a', 2);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q008', 'Which of the following is a Java code editor?', 'Eclipse', 'NetBeans', 'IntelliJ IDEA', 'All of the above', 'd', 1);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q009', 'What is the purpose of the "static" keyword in Java?', 'To create a method that can be called without creating an object', 'To create a variable that is shared among all instances of a class', 'Both A and B', 'None of the above', 'c', 3);
+
+INSERT INTO questions (questionID, question, option1, option2, option3, option4, correct_option, marks)
+VALUES ('Q010', 'Which of the following is a Java collection interface?', 'List', 'Set', 'Map', 'All of the above', 'd', 2);
+
+INSERT INTO Test (TestID, TeacherID, Subject, Difficulty, StartDateTime, EndDateTime, Description, Accepted)
+VALUES
+  ('TEST006', 'T001', 'Java1', 'Medium', '2024-04-25 09:00:00', '2024-04-25 11:00:00', 'Java Basics Test', 0),
+  ('TEST007', 'T002', 'Java2', 'Hard', '2024-04-27 13:00:00', '2024-04-27 15:00:00', 'Object-Oriented Programming Test', 1),
+  ('TEST008', 'T002', 'Java3', 'Easy', '2024-04-29 10:00:00', '2024-04-29 12:00:00', 'Collections and Generics Test', 0),
+  ('TEST009', 'T002', 'Java4', 'Medium', '2024-05-02 14:00:00', '2024-05-02 16:00:00', 'Exception Handling Test', 1),
+  ('TEST010', 'T002', 'Java5', 'Hard', '2024-05-04 09:00:00', '2024-05-04 11:00:00', 'Multithreading Test', 0),
+  ('TEST011', 'T001', 'Java6', 'Easy', '2024-05-06 13:00:00', '2024-05-06 15:00:00', 'Input/Output Test', 1),
+  ('TEST012', 'T001', 'Java7', 'Medium', '2024-05-08 10:00:00', '2024-05-08 12:00:00', 'JDBC Test', 0),
+  ('TEST013', 'T001', 'Java8', 'Hard', '2024-05-10 14:00:00', '2024-05-10 16:00:00', 'Networking Test', 1),
+  ('TEST014', 'T001', 'Java9', 'Easy', '2024-05-12 09:00:00', '2024-05-12 11:00:00', 'Servlets and JSP Test', 0),
+  ('TEST015', 'T002', 'Java10', 'Medium', '2024-05-14 13:00:00', '2024-05-14 15:00:00', 'Java EE Test', 1);
+
+
+INSERT INTO test_questions (TestID, QuestionID) VALUES
+('TEST006', 'Q001'),
+('TEST006', 'Q002'),
+('TEST006', 'Q003'),
+('TEST006', 'Q004'),
+('TEST006', 'Q005');
+
+
+INSERT INTO test_questions (TestID, QuestionID) VALUES
+('TEST007', 'Q006'),
+('TEST007', 'Q007'),
+('TEST007', 'Q008'),
+('TEST007', 'Q009'),
+('TEST007', 'Q010');
+
+
+INSERT INTO test_questions (TestID, QuestionID) VALUES
+('TEST008', 'Q001'),
+('TEST008', 'Q002'),
+('TEST008', 'Q003'),
+('TEST008', 'Q004'),
+('TEST008', 'Q005');
+
+INSERT INTO test_questions (TestID, QuestionID) VALUES
+('TEST009', 'Q001'),
+('TEST009', 'Q002'),
+('TEST009', 'Q003'),
+('TEST009', 'Q004'),
+('TEST009', 'Q005');

@@ -15,9 +15,11 @@ import com.project.backend.model.*;
 public class StudentController {
 
     TestDatabaseModel testDatabaseModel = null;
+    StudentDatabaseModel studentDatabaseModel = null;
 
     StudentController() {
         testDatabaseModel = new TestDatabaseModel();
+        studentDatabaseModel = new StudentDatabaseModel();
     }
 
     @GetMapping(path = "/studentDashboard")
@@ -38,9 +40,15 @@ public class StudentController {
         return "takeTest";
     }
 
+    @SuppressWarnings("unchecked")
     @PostMapping(path = "/submitStudentTest")
     String submitStudentTest(@RequestBody Map<String, Object> body) {
         System.out.println(body);
+        
+        Result result = new Result((String)body.get("SRN"), (String)body.get("testId"), (Map<String, String>)body.get("markedOptions"));
+        studentDatabaseModel.storeStudentResponses(result);
+        studentDatabaseModel.calculateStudentTotal(result);
+        studentDatabaseModel.storeTestResult(result);
         return String.format("redirect:/studentDashboard?SRN=%s", body.get("SRN"));
     }
 

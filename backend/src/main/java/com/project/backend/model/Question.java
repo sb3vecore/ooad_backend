@@ -42,7 +42,7 @@ public class Question {
     }
 
     public int evaluateQuestion(String markedAnswer) {
-        if(markedAnswer == this.answer) {
+        if(markedAnswer.equals(this.answer)) {
             return marks;
         }
         return 0;
