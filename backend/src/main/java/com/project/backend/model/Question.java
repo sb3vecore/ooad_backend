@@ -24,6 +24,23 @@ public class Question {
         this.options = options;
     }
 
+    public String getOptionName(String option) {
+        String optionName;
+        int index = this.options.indexOf(option);
+        if(index == 0) {
+            optionName = "a";
+        } else if(index == 1) {
+            optionName = "b";
+        } else if(index == 2) {
+            optionName = "c";
+        } else if(index == 3) {
+            optionName = "d";
+        } else {
+            optionName = null;
+        }
+        return optionName;
+    }
+
     public int evaluateQuestion(String markedAnswer) {
         if(markedAnswer == this.answer) {
             return marks;

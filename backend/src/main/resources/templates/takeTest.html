@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th = "https://www.thymeleaf.org">
     <head>
+        <script>
 
+            const requestBody = {
+                SRN: "",
+                testId: "",
+                markedOptions: {}
+            }
+
+            const handleClick = (event) => {
+                requestBody.markedOptions[event.target.name] = event.target.value
+            }
+
+            const handleSubmit = (event) => {
+                const parameters = new URLSearchParams(window.location.search)
+                requestBody.SRN = parameters.get("SRN")
+                requestBody.testId = parameters.get("testId")
+
+                const request = new XMLHttpRequest()
+                request.open("POST", `http://${window.location.host}/submitStudentTest`)
+                request.setRequestHeader("Content-Type", "application/json")
+                request.send(JSON.stringify(requestBody))
+
+                window.location.assign(`http://${window.location.host}/studentDashboard?SRN=${requestBody.SRN}`)
+            }
+        </script>
     </head>
 
     <body>
         <div th:each = "question: ${test.getQuestionList()}">
             <p th:text = "${question.getQuestion()}" />
-            <input type = "radio" th:each = "option: ${question.getOptions()}" th:text = "${option}" th:name = "${question.getQuestionId()}" />
+            <input onclick = "handleClick(event)" type = "radio" th:each = "option: ${question.getOptions()}" th:text = "${option}" th:value = "${question.getOptionName(option)}" th:name = "${question.getQuestionId()}" />
         </div>
+        <input type = "submit" onclick = "handleSubmit(event)" />
     </body>
 </html>

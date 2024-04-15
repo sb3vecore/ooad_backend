@@ -1,3 +1,5 @@
+USE online_test;
+
 INSERT INTO Test (TestID, TeacherID, Subject, Difficulty, StartDateTime, EndDateTime, Description, Accepted)
 VALUES
   ('TEST006', 'T001', 'Java1', 'Medium', '2024-04-25 09:00:00', '2024-04-25 11:00:00', 'Java Basics Test', 0),

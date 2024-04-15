@@ -44,8 +44,18 @@ CREATE TABLE Student_Test (
     SRN VARCHAR(50),
     TestID varchar(50),
     MarksSecured INT,
-    MarkedAnswers VARCHAR(100),
     PRIMARY KEY (SRN, TestID)
+);
+
+CREATE TABLE Student_Answers (
+    SRN VARCHAR(50),
+    testId VARCHAR(50),
+    questionId VARCHAR(50),
+    markedAnswer ENUM("a", "b", "c", "d"),
+    PRIMARY KEY (SRN, testId, questionId),
+    FOREIGN KEY (SRN) REFERENCES Student(SRN),
+    FOREIGN KEY (testId) REFERENCES Test_Questions(testId),
+    FOREIGN KEY (questionId) REFERENCES Questions(questionId)
 );
 
  -- Altering tables

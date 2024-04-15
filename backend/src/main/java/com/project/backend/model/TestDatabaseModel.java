@@ -136,7 +136,7 @@ public class TestDatabaseModel {
 
     }
 
-    public Test getTestdetails(String testId) {
+    public Test getTestDetails(String testId) {
         try {
             Statement statement = this.database.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(String.format("SELECT temp.questionId, question, option1, option2, option3, option4, correct_option, marks FROM (SELECT questionId FROM Test_Questions WHERE testId = \"%s\") AS temp JOIN Questions WHERE temp.questionId = Questions.questionID;", testId));
