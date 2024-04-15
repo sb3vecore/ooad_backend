@@ -74,6 +74,23 @@ public class Student {
 
     }
 
+    public boolean checkStudentSRN(String SRN) {
+        try {
+            this.statement = this.connection.createStatement();
+            this.resultSet = this.statement.executeQuery(String.format("SELECT SRN FROM Student WHERE SRN = \"%s\";", SRN));
+
+            while(this.resultSet.next()) {
+                if(this.resultSet.getString("SRN").equals(SRN)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return false;
+        }
+    }
+
     public String getName(){
         return Name;
     }

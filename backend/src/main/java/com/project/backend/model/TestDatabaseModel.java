@@ -114,18 +114,18 @@ public class TestDatabaseModel {
     public ArrayList<Test> retrieveAllTests() {
         try {
             Statement statement = this.database.connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(
-                    "SELECT TestID, Subject, Difficulty, StartDateTime, EndDateTime, Description from Test where Accepted = true;");
+            ResultSet resultSet = statement.executeQuery("SELECT TestID, TeacherID, Subject, Difficulty, StartDateTime, EndDateTime, Description from Test where Accepted = true;");
             ArrayList<Test> test = new ArrayList<Test>();
             while (resultSet.next()) {
                 test.add(new Test(
-                        resultSet.getString("TeacherID"),
-                        resultSet.getString("TestID"),
-                        resultSet.getString("Subject"),
-                        resultSet.getString("Difficulty"),
-                        resultSet.getString("StartDateTime"),
-                        resultSet.getString("EndDateTime"),
-                        resultSet.getString("Description")));
+                    resultSet.getString("TestID"),
+                    resultSet.getString("TeacherID"),
+                    resultSet.getString("Subject"),
+                    resultSet.getString("Difficulty"),
+                    resultSet.getString("StartDateTime"),
+                    resultSet.getString("EndDateTime"),
+                    resultSet.getString("Description")
+                ));
             }
             return test;
 

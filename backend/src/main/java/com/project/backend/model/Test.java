@@ -13,8 +13,7 @@ public class Test {
     Boolean accepted;
     ArrayList<Question> questionList;
 
-    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime,
-            String description, boolean accepted, ArrayList<Question> questionList) {
+    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description, boolean accepted, ArrayList<Question> questionList) {
         this.testId = null;
         this.teacherId = teacherId;
         this.subject = subject;
@@ -26,8 +25,7 @@ public class Test {
         this.questionList = questionList;
     }
 
-    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime,
-            String endDateTime, String description) {
+    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description) {
         this.testId = testId;
         this.teacherId = teacherId;
         this.subject = subject;
@@ -38,43 +36,47 @@ public class Test {
         this.questionList = null;
     }
 
-    String getTeacherId() {
+    public String getTestId() {
+        return this.testId;
+    }
+
+    public String getTeacherId() {
         return this.teacherId;
     }
 
-    String getSubject() {
+    public String getSubject() {
         return this.subject;
     }
 
-    String getDifficulty() {
+    public String getDifficulty() {
         return this.difficulty;
     }
 
-    String getStartDateTime() {
+    public String getStartDateTime() {
         return this.startDateTime;
     }
 
-    String getEndDateTime() {
+    public String getEndDateTime() {
         return this.endDateTime;
     }
 
-    String getDescription() {
+    public String getDescription() {
         return this.description;
     }
 
-    boolean getAccepted() {
+    public boolean getAccepted() {
         return this.accepted;
     }
 
-    ArrayList<Question> getQuestionList() {
+    public ArrayList<Question> getQuestionList() {
         return this.questionList;
     }
 
-    void setAccepted(Boolean accepted) {
+    public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
     }
 
-    void setQuestionList(ArrayList<Question> questionList) {
+    public void setQuestionList(ArrayList<Question> questionList) {
         this.questionList = questionList;
     }
 }

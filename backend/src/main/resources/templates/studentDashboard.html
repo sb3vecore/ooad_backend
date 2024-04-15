@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th = "https://www.thymeleaf.org">
+    <head>
+
+    </head>
+
+    <body>
+        <div th:each = "test: ${tests}">
+            <!-- <p th:text = "${test.getTestId()}" /> -->
+            <p th:text = "${test.getSubject()}" />
+            <p th:text = "${test.getDifficulty()}" />
+            <p th:text = "${test.getStartDateTime()}" />
+            <p th:text = "${test.getEndDateTime()}" />
+            <p th:text = "${test.getDescription()}" />
+            <input type = "button" value = "Take Test" />
+        </div>
+    </body>
+</html>
