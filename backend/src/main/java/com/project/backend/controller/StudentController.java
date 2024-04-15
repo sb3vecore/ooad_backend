@@ -29,4 +29,9 @@ public class StudentController {
         return "studentDashboard";
     }
 
+    @GetMapping(path = "/takeTest")
+    String takeTest(@RequestParam String SRN, @RequestParam String testId) {
+        
+    }
+
 }
