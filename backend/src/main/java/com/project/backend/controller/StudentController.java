@@ -25,6 +25,7 @@ public class StudentController {
     @GetMapping(path = "/studentDashboard")
     String viewStudentDashboard(@RequestParam String SRN, Model model) {
         Student student = new Student();
+        model.addAttribute("SRN", SRN);
         if(student.checkStudentSRN(SRN) == false) {
             return "invalidStudent";
         }
@@ -35,6 +36,10 @@ public class StudentController {
 
     @GetMapping(path = "/takeTest")
     String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model) {
+        Student student = new Student();
+        if(student.checkStudentSRN(SRN) == false) {
+            return "invalidStudent";
+        }
         Test test = testDatabaseModel.getTestDetails(testId);
         model.addAttribute("test", test);
         return "takeTest";

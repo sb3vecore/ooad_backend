@@ -1,7 +1,5 @@
 package com.project.backend.model;
-import com.project.backend.model.DatabaseConnection;
 import java.sql.Connection;
-import java.util.*;
 import java.sql.*;
 
 public class Student {
