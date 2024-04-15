@@ -3,6 +3,7 @@ package com.project.backend.model;
 import java.util.*;
 
 public class Test {
+    String testId;
     String teacherId;
     String subject;
     String difficulty;
@@ -12,7 +13,9 @@ public class Test {
     Boolean accepted;
     ArrayList<Question> questionList;
 
-    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description, boolean accepted, ArrayList<Question> questionList) {
+    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime,
+            String description, boolean accepted, ArrayList<Question> questionList) {
+        this.testId = null;
         this.teacherId = teacherId;
         this.subject = subject;
         this.difficulty = difficulty;
@@ -21,6 +24,18 @@ public class Test {
         this.description = description;
         this.accepted = accepted;
         this.questionList = questionList;
+    }
+
+    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime,
+            String endDateTime, String description) {
+        this.testId = testId;
+        this.teacherId = teacherId;
+        this.subject = subject;
+        this.difficulty = difficulty;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.description = description;
+        this.questionList = null;
     }
 
     String getTeacherId() {
@@ -57,5 +72,9 @@ public class Test {
 
     void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    void setQuestionList(ArrayList<Question> questionList) {
+        this.questionList = questionList;
     }
 }
