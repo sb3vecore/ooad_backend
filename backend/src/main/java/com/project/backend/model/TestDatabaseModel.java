@@ -136,4 +136,52 @@ public class TestDatabaseModel {
 
     }
 
+    public Test getTestdetails(String testId) {
+        try {
+            Statement statement = this.database.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(String.format("SELECT temp.questionId, question, option1, option2, option3, option4, correct_option, marks FROM (SELECT questionId FROM Test_Questions WHERE testId = \"%s\") AS temp JOIN Questions WHERE temp.questionId = Questions.questionID;", testId));
+            ArrayList<Question> questions = new ArrayList<Question>();
+            Test test = null;
+
+            while(resultSet.next()) {
+                questions.add(new Question(
+                    resultSet.getString("questionId"),
+                    resultSet.getString("question"),
+                    resultSet.getString("correct_option"),
+                    resultSet.getInt("marks"),
+                    new ArrayList<String>(Arrays.asList(
+                        resultSet.getString("option1"),
+                        resultSet.getString("option2"),
+                        resultSet.getString("option3"),
+                        resultSet.getString("option4")
+                    ))
+                ));
+            }
+
+            resultSet = statement.executeQuery(String.format("SELECT * FROM Test WHERE TestID = \"%s\"", testId));
+
+            while(resultSet.next()) {
+                test = new Test(
+                    resultSet.getString("TestID"),
+                    resultSet.getString("TeacherID"),
+                    resultSet.getString("Subject"),
+                    resultSet.getString("Difficulty"),
+                    resultSet.getString("StartDateTime"),
+                    resultSet.getString("EndDateTime"),
+                    resultSet.getString("Description"),
+                    questions
+                );
+            }
+
+            resultSet.close();
+            statement.close();
+
+            return test;
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return null;
+        }
+    }
+
 }

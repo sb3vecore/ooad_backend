@@ -60,7 +60,7 @@ public class TeacherController {
             (String)body.get("startDateTime"),
             (String)body.get("endDateTime"),
             (String)body.get("description"),
-            false,
+            true,
             questions
         );
 

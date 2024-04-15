@@ -73,7 +73,7 @@ public class HomeController {
         // stu.login(SRN);
         if (passFromDB.equals(Password)) {
             redirectAttributes.addAttribute("teacherId", ID);
-            return "redirect:/studentDashboard";
+            return "redirect:/teacherDashboard";
         } else {
             model.addAttribute("error", "Incorrect TeacherID or Password");
             return "teacherLogin";

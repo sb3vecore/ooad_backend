@@ -3,10 +3,19 @@ package com.project.backend.model;
 import java.util.*;
 
 public class Question {
+    String questionId;
     String question;
     String answer;
     int marks;
     ArrayList<String> options;
+
+    public Question(String questionId, String question, String answer, int marks, ArrayList<String> options) {
+        this.questionId = questionId;
+        this.question = question;
+        this.answer = answer;
+        this.marks = marks;
+        this.options = options;
+    }
 
     public Question(String question, String answer, int marks, ArrayList<String> options) {
         this.question = question;
@@ -15,26 +24,30 @@ public class Question {
         this.options = options;
     }
 
-    int evaluateQuestion(String markedAnswer) {
+    public int evaluateQuestion(String markedAnswer) {
         if(markedAnswer == this.answer) {
             return marks;
         }
         return 0;
     }
 
-    String getQuestion() {
+    public String getQuestionId() {
+        return this.questionId;
+    }
+
+    public String getQuestion() {
         return this.question;
     }
 
-    String getAnswer() {
+    public String getAnswer() {
         return this.answer;
     }
 
-    int getMarks() {
+    public int getMarks() {
         return this.marks;
     }
 
-    ArrayList<String> getOptions() {
+    public ArrayList<String> getOptions() {
         return this.options;
     }
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th = "https://www.thymeleaf.org">
+    <head>
+
+    </head>
+
+    <body>
+        <div th:each = "question: ${test.getQuestionList()}">
+            <p th:text = "${question.getQuestion()}" />
+            <input type = "radio" th:each = "option: ${question.getOptions()}" th:text = "${option}" th:name = "${question.getQuestionId()}" />
+        </div>
+    </body>
+</html>

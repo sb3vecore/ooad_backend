@@ -30,8 +30,10 @@ public class StudentController {
     }
 
     @GetMapping(path = "/takeTest")
-    String takeTest(@RequestParam String SRN, @RequestParam String testId) {
-        
+    String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model) {
+        Test test = testDatabaseModel.getTestdetails(testId);
+        model.addAttribute("test", test);
+        return "takeTest";
     }
 
 }

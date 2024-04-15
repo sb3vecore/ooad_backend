@@ -36,6 +36,17 @@ public class Test {
         this.questionList = null;
     }
 
+    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description, ArrayList<Question> questionList) {
+        this.testId = testId;
+        this.teacherId = teacherId;
+        this.subject = subject;
+        this.difficulty = difficulty;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.description = description;
+        this.questionList = questionList;
+    }
+
     public String getTestId() {
         return this.testId;
     }
