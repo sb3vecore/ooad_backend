@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.backend.model.*;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class TeacherController {
@@ -22,18 +24,17 @@ public class TeacherController {
     }
 
     @GetMapping(path = "/teacherDashboard")
-    String viewTeacherDashboard(@RequestParam String teacherId, Model model) {
-        model.addAttribute("teacherId", teacherId);
-        if(testDatabaseModel.checkTeacherId(teacherId) == false) {
-            return "invalidTeacher";
+    String viewTeacherDashboard(@RequestParam String teacherId, Model model, HttpSession session) {
+        if(!teacherId.equals(session.getAttribute("teacherId"))) {
+            return "invalidSession";
         }
         return "teacherDashboard";
     }
 
     @GetMapping(path = "/uploadTest")
-    String uploadTest(@RequestParam String teacherId, Model model) {
-        if(testDatabaseModel.checkTeacherId(teacherId) == false) {
-            return "invalidTeacher";
+    String uploadTest(@RequestParam String teacherId, Model model, HttpSession session) {
+        if(!teacherId.equals(session.getAttribute("teacherId"))) {
+            return "invalidSession";
         }
         return "uploadTest";
     }

@@ -9,36 +9,65 @@
             margin: 0 auto;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
             color: #333;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         th, td {
             padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
         }
-
         th {
             background-color: #f2f2f2;
         }
-
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
         tr:hover {
             background-color: #f5f5f5;
         }
+        .review-comment {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
     </style>
+    <script>
+        const saveReviewComments = () => {
+            const parameters = new URLSearchParams(window.location.search);
+            const SRN = parameters.get("SRN");
+            const testId = parameters.get("testId");
+            const reviewComments = {};
+            const commentInputs = document.querySelectorAll('input[name="reviewComments"]');
+            commentInputs.forEach(input => {
+                reviewComments[input.id] = input.value;
+            });
+
+            fetch('/saveReviewComments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ SRN, testId, reviewComments })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to save review comments');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </head>
 <body>
     <h1>Test Review</h1>
@@ -52,6 +81,7 @@
                 <th>Option 4</th>
                 <th>Marked Answer</th>
                 <th>Correct Answer</th>
+                <th>Review Comment</th>
             </tr>
         </thead>
         <tbody>
@@ -63,8 +93,12 @@
                 <td th:text="${detail.option4}"></td>
                 <td th:text="${detail.markedAnswer}"></td>
                 <td th:text="${detail.correct_option}"></td>
+                <td>
+                    <input type="text" th:id="${detail.questionId}" name="reviewComments" th:value="${detail.reviewComments}" class="review-comment">
+                </td>
             </tr>
         </tbody>
     </table>
+    <button onclick="saveReviewComments()">Save Review Comments</button>
 </body>
 </html>

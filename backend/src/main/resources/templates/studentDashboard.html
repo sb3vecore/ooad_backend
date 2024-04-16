@@ -73,10 +73,48 @@
         }
     </style>
     <script>
-        const handleTakeTest = (event) => {
-            const parameters = new URLSearchParams(window.location.search);
-            const SRN = parameters.get("SRN");
-            window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`);
+        const handleTakeTest = (event, startDateTime, endDateTime) => {
+            const splitStartDateTime = startDateTime.split(" ")
+            const startDate = splitStartDateTime[0]
+            const startTime = splitStartDateTime[1]
+            const splitEndDateTime = endDateTime.split(" ")
+            const endDate = splitEndDateTime[0]
+            const endTime = splitEndDateTime[1]
+
+            const splitStartDate = startDate.split("-")
+            
+            const splitStartTime = startTime.split(":")
+            const splitEndTime = endTime.split(":")
+
+            const totalStartSeconds = (splitStartTime[0] * 3600) + (splitStartTime[1] * 60) + (splitStartTime[2] * 1)
+            // const totalEndSeconds = (splitEndTime[0] * 3600) + (splitEndTime[1] * 60) + (splitEndTime[2] * 1)
+            // const testTime = totalEndSeconds - totalStartSeconds;
+
+            const date = new Date()
+            const currentDay = date.getDate()
+            const currentHour = date.getHours()
+            const currentMinute = date.getMinutes()
+            const currentSeconds = date.getSeconds()
+            const totalCurrentSeconds = (currentHour * 3600) + (currentMinute * 60) + (currentSeconds * 1)
+
+            const timeDifference = totalCurrentSeconds - totalStartSeconds
+
+            if(currentDay < parseInt(splitStartDate[2])) {
+                alert("Early")
+            } else if(currentDay === parseInt(splitStartDate[2])) {
+                if(timeDifference < 0) {
+                    alert("Early")
+                } else if(timeDifference >= 0 && timeDifference <= 1800) {
+                    const parameters = new URLSearchParams(window.location.search)
+                    const SRN = parameters.get("SRN")
+                    window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`)
+                } else {
+                    alert("Late")
+                }
+            } else {
+                alert("Late")
+            }
+
         }
 
         const viewPreviousTests = () => {
@@ -98,7 +136,7 @@
             <p>Start Time: <span th:text="${test.startDateTime}"></span></p>
             <p>End Time: <span th:text="${test.endDateTime}"></span></p>
             <p th:text="${test.description}"></p>
-            <button th:id="${test.testId}" th:onclick="handleTakeTest(event)">Take Test</button>
+            <button th:id="${test.testId}" th:attr = "onclick = |handleTakeTest(event, '${test.getStartDateTime()}', '${test.getEndDateTime()}')|">Take Test</button>
         </div>
     </div>
 </body>

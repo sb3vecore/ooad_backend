@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.project.backend.model.Admin;
 import com.project.backend.model.Student;
@@ -45,7 +44,7 @@ public class HomeController {
         return "redirect:/";
     }
     @PostMapping("/studentLogin")
-    public String loginStudent(@RequestParam String SRN, @RequestParam String Password,RedirectAttributes redirectAttributes,Model model){
+    public String loginStudent(@RequestParam String SRN, @RequestParam String Password, RedirectAttributes redirectAttributes, Model model, HttpSession session){
         // System.out.println(SRN+Password);
         Student stu = new Student();
         String passFromDB = stu.login(SRN);
@@ -53,6 +52,7 @@ public class HomeController {
         // stu.login(SRN);
         if (passFromDB.equals(Password)) {
             redirectAttributes.addAttribute("SRN", SRN);
+            session.setAttribute("SRN", SRN);
             return "redirect:/studentDashboard";
         } else {
             model.addAttribute("error", "Incorrect SRN or Password");
@@ -68,7 +68,7 @@ public class HomeController {
         return "redirect:/";
     }
     @PostMapping("/teacherLogin")
-    public String loginTeacher(@RequestParam String ID, @RequestParam String Password,RedirectAttributes redirectAttributes,Model model){
+    public String loginTeacher(@RequestParam String ID, @RequestParam String Password,RedirectAttributes redirectAttributes,Model model, HttpSession session){
         // System.out.println(SRN+Password);
         Teacher teac = new Teacher();
         String passFromDB = teac.login(ID);
@@ -76,6 +76,7 @@ public class HomeController {
         // stu.login(SRN);
         if (passFromDB.equals(Password)) {
             redirectAttributes.addAttribute("teacherId", ID);
+            session.setAttribute("teacherId", ID);
             return "redirect:/teacherDashboard";
         } else {
             model.addAttribute("error", "Incorrect TeacherID or Password");

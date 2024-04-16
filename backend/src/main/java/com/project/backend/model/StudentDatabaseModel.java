@@ -2,6 +2,7 @@ package com.project.backend.model;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.*;
 
 public class StudentDatabaseModel {
@@ -18,11 +19,12 @@ public class StudentDatabaseModel {
             Statement statement = this.database.connection.createStatement();
 
             for(Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
-                statement.executeUpdate(String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\");", 
+                statement.executeUpdate(String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\");", 
                     result.getSRN(),
                     result.getTestId(),
                     entry.getKey(),
-                    entry.getValue()
+                    entry.getValue(),
+                    "None"
                 ));
             }
 
@@ -118,14 +120,15 @@ public class StudentDatabaseModel {
         try {
             Statement statement = database.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
-                "SELECT q.question, q.option1, q.option2, q.option3, q.option4, q.correct_option, sa.markedAnswer " +
+                "SELECT q.questionid, q.question, q.option1, q.option2, q.option3, q.option4, q.correct_option, sa.markedAnswer,  sa.reviewComments " +
                 "FROM questions q " +
                 "JOIN student_answers sa ON q.questionid = sa.questionid " +
                 "WHERE sa.SRN = (SELECT SRN FROM student WHERE SRN = '" + SRN + "') " +
                 "AND sa.testid = '" + testId + "'");
-
+    
             while (resultSet.next()) {
                 Map<String, Object> questionDetails = new HashMap<>();
+                questionDetails.put("questionId", resultSet.getString("questionid"));
                 questionDetails.put("question", resultSet.getString("question"));
                 questionDetails.put("option1", resultSet.getString("option1"));
                 questionDetails.put("option2", resultSet.getString("option2"));
@@ -133,12 +136,48 @@ public class StudentDatabaseModel {
                 questionDetails.put("option4", resultSet.getString("option4"));
                 questionDetails.put("correct_option", resultSet.getString("correct_option"));
                 questionDetails.put("markedAnswer", resultSet.getString("markedAnswer"));
+                questionDetails.put("reviewComments", resultSet.getString("reviewComments"));
+
                 testDetails.add(questionDetails);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return testDetails;
+    }
+
+    public void storeReviewComments(String SRN, String testId, Map<String, String> reviewComments) {
+        try {
+            String studentid = getStudentId(SRN);
+            System.out.println("HEREE"+SRN+testId+reviewComments);
+            PreparedStatement statement = database.connection.prepareStatement(
+                    "UPDATE student_answers SET reviewComments = ? WHERE SRN = ? AND testId = ? AND questionId = ?");
+            for (Map.Entry<String, String> entry : reviewComments.entrySet()) {
+                String questionId = entry.getKey();
+                String comment = entry.getValue();
+                statement.setString(1, comment);
+                statement.setString(2, studentid);
+                statement.setString(3, testId);
+                statement.setString(4, questionId);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private String getStudentId(String SRN) {
+        try {
+            Statement statement = database.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT SRN FROM student WHERE SRN = '" + SRN + "'");
+            if (resultSet.next()) {
+
+                return resultSet.getString("SRN");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Failed";
     }
 
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.backend.model.*;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class StudentController {
 
@@ -23,11 +25,9 @@ public class StudentController {
     }
 
     @GetMapping(path = "/studentDashboard")
-    String viewStudentDashboard(@RequestParam String SRN, Model model) {
-        Student student = new Student();
-        model.addAttribute("SRN", SRN);
-        if(student.checkStudentSRN(SRN) == false) {
-            return "invalidStudent";
+    String viewStudentDashboard(@RequestParam String SRN, Model model, HttpSession session) {
+        if(!SRN.equals(session.getAttribute("SRN"))) {
+            return "invalidSession";
         }
         ArrayList<Test> tests = testDatabaseModel.retrieveAllValidTests(SRN);
         model.addAttribute("tests", tests);
@@ -35,10 +35,9 @@ public class StudentController {
     }
 
     @GetMapping(path = "/takeTest")
-    String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model) {
-        Student student = new Student();
-        if(student.checkStudentSRN(SRN) == false) {
-            return "invalidStudent";
+    String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
+        if(!SRN.equals(session.getAttribute("SRN"))) {
+            return "invalidSession";
         }
         Test test = testDatabaseModel.getTestDetails(testId);
         model.addAttribute("test", test);
@@ -58,7 +57,10 @@ public class StudentController {
     }
 
     @GetMapping(path = "/viewPreviousTests")
-    String viewPreviousTests(@RequestParam String SRN, Model model) {
+    String viewPreviousTests(@RequestParam String SRN, Model model, HttpSession session) {
+        if(!SRN.equals(session.getAttribute("SRN"))) {
+            return "invalidSession";
+        }
         PrevTests prevTests = new PrevTests();
         List<Map<String, Object>> tests = prevTests.retrieveAllTests(SRN);
         model.addAttribute("tests", tests);
@@ -66,16 +68,37 @@ public class StudentController {
     }
 
     @GetMapping(path = "/viewTestResult")
-    String viewTestResult(@RequestParam String SRN, @RequestParam String testId, Model model) {
+    String viewTestResult(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
+        if(!SRN.equals(session.getAttribute("SRN"))) {
+            return "invalidSession";
+        }
         model.addAttribute("testResult", this.studentDatabaseModel.getTestResult(SRN, testId));
         return "showTestResult";
     }
 
     @GetMapping(path = "/reviewTest")
-    public String reviewTest(@RequestParam String SRN, @RequestParam String testId, Model model) {
+    public String reviewTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
+        if(!SRN.equals(session.getAttribute("SRN"))) {
+            return "invalidSession";
+        }
         List<Map<String, Object>> testDetails = studentDatabaseModel.getTestDetails(SRN, testId);
         model.addAttribute("testDetails", testDetails);
         return "reviewTest";
+
+    
+        
+    }
+
+    @PostMapping(path = "/saveReviewComments")
+    public String saveReviewComments(@RequestBody Map<String, Object> body) {
+        String SRN = (String) body.get("SRN");
+        String testId = (String) body.get("testId");
+        Map<String, String> reviewComments = (Map<String, String>) body.get("reviewComments");
+        studentDatabaseModel.storeReviewComments(SRN, testId, reviewComments);
+        return "redirect:/reviewTest?SRN=" + SRN + "&testId=" + testId;
     }
 
 }
+
+
+
