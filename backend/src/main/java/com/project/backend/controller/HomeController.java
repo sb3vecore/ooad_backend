@@ -13,6 +13,8 @@ import com.project.backend.model.Admin;
 import com.project.backend.model.Student;
 import com.project.backend.model.Teacher;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class HomeController {
     @GetMapping("/")
@@ -83,18 +85,18 @@ public class HomeController {
 
 
     @PostMapping("/adminLogin")
-    public String loginAdmin(@RequestParam String adminId, @RequestParam String password, RedirectAttributes redirectAttributes, Model model) {
-        Admin adm = new Admin();
-        String passFromDB = adm.login(adminId);
+    public String loginAdmin(@RequestParam String adminId, @RequestParam String password,
+     RedirectAttributes redirectAttributes, Model model, HttpSession session) {
+
+        Admin admin = new Admin();
+        String passFromDB = admin.login(adminId);
     
         if (passFromDB.equals(password)) {
-            // Build the redirect URL with adminId as a URL parameter
-            String redirectUrl = UriComponentsBuilder.fromPath("/adminDashboard")
-                    .queryParam("adminId", adminId)
-                    .toUriString();
-            
-            // Redirect to the constructed URL
-            return "redirect:" + redirectUrl;
+            redirectAttributes.addAttribute("adminId", adminId);
+            admin.setAdminId(adminId);
+            session.setAttribute("admin", admin);
+            return "redirect:/adminDashboard";
+
         } else {
             model.addAttribute("error", "Incorrect AdminID or Password");
             return "adminLogin";
