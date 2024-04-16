@@ -2,14 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Previous Tests</title>
+    <script>
+        const reviewTest = (event) => {
+            const parameters = new URLSearchParams(window.location.search);
+            const SRN = parameters.get("SRN");
+            const testId = event.target.id;
+            window.location.assign(`http://${window.location.host}/reviewTest?SRN=${SRN}&testId=${testId}`);
+        }
+    </script>
 </head>
- <body>
+<body>
     <h1>Previous Tests</h1>
     <table>
         <thead>
             <tr>
+                <th>Test ID</th>
                 <th>Test Name</th>
                 <th>Marks Secured</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -17,8 +27,9 @@
                 <td th:text="${test.testId}"></td>
                 <td th:text="${test.Subject}"></td>
                 <td th:text="${test.markssecured}"></td>
+                <td><input type="button" value="Review Test" th:id="${test.testId}" th:onclick="reviewTest(event)"></td>
             </tr>
         </tbody>
     </table>
-</body> 
+</body>
 </html>

@@ -23,7 +23,10 @@
                 request.setRequestHeader("Content-Type", "application/json")
                 request.send(JSON.stringify(requestBody))
 
-                window.location.assign(`http://${window.location.host}/studentDashboard?SRN=${requestBody.SRN}`)
+                setTimeout(() => {
+                    window.location.assign(`http://${window.location.host}/viewTestResult?SRN=${requestBody.SRN}&testId=${requestBody.testId}`)
+                }, 500)
+
             }
 
             const startTimer = (event, startDateTime, endDateTime) => {

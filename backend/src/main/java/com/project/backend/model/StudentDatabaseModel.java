@@ -26,6 +26,8 @@ public class StudentDatabaseModel {
                 ));
             }
 
+            statement.close();
+
         } catch(Exception exception) {
             System.out.println(exception);
         }
@@ -79,9 +81,64 @@ public class StudentDatabaseModel {
                 result.totalScore
             ));
 
+            statement.close();
+
         } catch(Exception exception) {
             System.out.println(exception);
         }
+    }
+
+    public int getTestResult(String SRN, String testId) {
+        try {
+
+            Statement statement = this.database.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(String.format("SELECT MarksSecured FROM Student_Test WHERE SRN = \"%s\" AND TestID = \"%s\";",
+                SRN,
+                testId
+            ));
+            int totalMarks = -1;
+
+            while(resultSet.next()) {
+                totalMarks = resultSet.getInt("MarksSecured");
+            }
+
+            resultSet.close();
+            statement.close();
+
+            return totalMarks;
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+            return -1;
+        }
+    }
+
+    public List<Map<String, Object>> getTestDetails(String SRN, String testId) {
+        List<Map<String, Object>> testDetails = new ArrayList<>();
+        try {
+            Statement statement = database.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                "SELECT q.question, q.option1, q.option2, q.option3, q.option4, q.correct_option, sa.markedAnswer " +
+                "FROM questions q " +
+                "JOIN student_answers sa ON q.questionid = sa.questionid " +
+                "WHERE sa.SRN = (SELECT SRN FROM student WHERE SRN = '" + SRN + "') " +
+                "AND sa.testid = '" + testId + "'");
+
+            while (resultSet.next()) {
+                Map<String, Object> questionDetails = new HashMap<>();
+                questionDetails.put("question", resultSet.getString("question"));
+                questionDetails.put("option1", resultSet.getString("option1"));
+                questionDetails.put("option2", resultSet.getString("option2"));
+                questionDetails.put("option3", resultSet.getString("option3"));
+                questionDetails.put("option4", resultSet.getString("option4"));
+                questionDetails.put("correct_option", resultSet.getString("correct_option"));
+                questionDetails.put("markedAnswer", resultSet.getString("markedAnswer"));
+                testDetails.add(questionDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return testDetails;
     }
 
 }

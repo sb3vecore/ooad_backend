@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Review</title>
+</head>
+<body>
+    <h1>Test Review</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Marked Answer</th>
+                <th>Correct Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="detail : ${testDetails}">
+                <td th:text="${detail.question}"></td>
+                <td th:text="${detail.option1}"></td>
+                <td th:text="${detail.option2}"></td>
+                <td th:text="${detail.option3}"></td>
+                <td th:text="${detail.option4}"></td>
+                <td th:text="${detail.markedAnswer}"></td>
+                <td th:text="${detail.correct_option}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -111,10 +111,13 @@ public class TestDatabaseModel {
 
     }
 
-    public ArrayList<Test> retrieveAllTests() {
+    public ArrayList<Test> retrieveAllValidTests(String SRN) {
         try {
             Statement statement = this.database.connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT TestID, TeacherID, Subject, Difficulty, StartDateTime, EndDateTime, Description from Test where Accepted = true;");
+            ResultSet resultSet = statement.executeQuery(String.format(
+                "SELECT TestID, TeacherID, Subject, Difficulty, StartDateTime, EndDateTime, Description from Test where Accepted = true AND TestID NOT IN (SELECT testId FROM Student_Test WHERE SRN = \"%s\");",
+                SRN
+            ));
             ArrayList<Test> test = new ArrayList<Test>();
             while (resultSet.next()) {
                 test.add(new Test(

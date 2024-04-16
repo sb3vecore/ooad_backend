@@ -29,7 +29,7 @@ public class StudentController {
         if(student.checkStudentSRN(SRN) == false) {
             return "invalidStudent";
         }
-        ArrayList<Test> tests = testDatabaseModel.retrieveAllTests();
+        ArrayList<Test> tests = testDatabaseModel.retrieveAllValidTests(SRN);
         model.addAttribute("tests", tests);
         return "studentDashboard";
     }
@@ -47,7 +47,7 @@ public class StudentController {
 
     @SuppressWarnings("unchecked")
     @PostMapping(path = "/submitStudentTest")
-    String submitStudentTest(@RequestBody Map<String, Object> body) {
+    String submitStudentTest(@RequestBody Map<String, Object> body, Model model) {
         System.out.println(body);
         
         Result result = new Result((String)body.get("SRN"), (String)body.get("testId"), (Map<String, String>)body.get("markedOptions"));
@@ -65,5 +65,17 @@ public class StudentController {
         return "viewPreviousTests";
     }
 
+    @GetMapping(path = "/viewTestResult")
+    String viewTestResult(@RequestParam String SRN, @RequestParam String testId, Model model) {
+        model.addAttribute("testResult", this.studentDatabaseModel.getTestResult(SRN, testId));
+        return "showTestResult";
+    }
+
+    @GetMapping(path = "/reviewTest")
+    public String reviewTest(@RequestParam String SRN, @RequestParam String testId, Model model) {
+        List<Map<String, Object>> testDetails = studentDatabaseModel.getTestDetails(SRN, testId);
+        model.addAttribute("testDetails", testDetails);
+        return "reviewTest";
+    }
 
 }
