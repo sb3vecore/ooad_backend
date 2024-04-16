@@ -2,6 +2,76 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .test-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-card h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .test-card p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .test-card button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .test-card button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script>
         const handleTakeTest = (event) => {
             const parameters = new URLSearchParams(window.location.search);
@@ -18,16 +88,18 @@
 </head>
 <body>
     <h1>Student Dashboard</h1>
-    <div>
-        <input type="button" value="View Previous Tests" th:onclick="viewPreviousTests()">
+    <div class="button-container">
+        <button onclick="viewPreviousTests()">View Previous Tests</button>
     </div>
     <div th:each="test: ${tests}">
-        <h2 th:text="${test.subject}"></h2>
-        <p>Difficulty: <span th:text="${test.difficulty}"></span></p>
-        <p>Start Time: <span th:text="${test.startDateTime}"></span></p>
-        <p>End Time: <span th:text="${test.endDateTime}"></span></p>
-        <p th:text="${test.description}"></p>
-        <input type="button" value="Take Test" th:id="${test.testId}" th:onclick="handleTakeTest(event)">
+        <div class="test-card">
+            <h2 th:text="${test.subject}"></h2>
+            <p>Difficulty: <span th:text="${test.difficulty}"></span></p>
+            <p>Start Time: <span th:text="${test.startDateTime}"></span></p>
+            <p>End Time: <span th:text="${test.endDateTime}"></span></p>
+            <p th:text="${test.description}"></p>
+            <button th:id="${test.testId}" th:onclick="handleTakeTest(event)">Take Test</button>
+        </div>
     </div>
 </body>
 </html>
