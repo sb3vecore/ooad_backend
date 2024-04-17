@@ -194,7 +194,6 @@ public class Admin {
             } else if (columnName.equalsIgnoreCase("EndDateTime")) {
               endDateTimeValue = resultSet.getString(i);
             }
-            
           }
     
           startDateTimeValue = startDateTimeValue.substring(0, 10) + 'T' + startDateTimeValue.substring(10 + 1);
