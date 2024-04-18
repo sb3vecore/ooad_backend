@@ -57,6 +57,11 @@ public class Test {
         this.endDateTime = endDateTime;
     }
 
+    public Test(String testId, String subject) { //for leaderboard functionality
+        this.testId = testId;
+        this.subject = subject;
+    }
+
     public String getTestId() {
         return this.testId;
     }
