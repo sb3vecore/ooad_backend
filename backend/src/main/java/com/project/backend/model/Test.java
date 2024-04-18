@@ -13,7 +13,8 @@ public class Test {
     Boolean accepted;
     ArrayList<Question> questionList;
 
-    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description, boolean accepted, ArrayList<Question> questionList) {
+    public Test(String teacherId, String subject, String difficulty, String startDateTime, String endDateTime,
+            String description, boolean accepted, ArrayList<Question> questionList) {
         this.testId = null;
         this.teacherId = teacherId;
         this.subject = subject;
@@ -25,7 +26,8 @@ public class Test {
         this.questionList = questionList;
     }
 
-    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description) {
+    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime,
+            String endDateTime, String description) {
         this.testId = testId;
         this.teacherId = teacherId;
         this.subject = subject;
@@ -36,7 +38,8 @@ public class Test {
         this.questionList = null;
     }
 
-    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime, String endDateTime, String description, ArrayList<Question> questionList) {
+    public Test(String testId, String teacherId, String subject, String difficulty, String startDateTime,
+            String endDateTime, String description, ArrayList<Question> questionList) {
         this.testId = testId;
         this.teacherId = teacherId;
         this.subject = subject;
@@ -47,13 +50,12 @@ public class Test {
         this.questionList = questionList;
     }
 
-    public Test(String testId, String difficulty, String startDateTime, String endDateTime) { //for undo functionality
+    public Test(String testId, String difficulty, String startDateTime, String endDateTime) { // for undo functionality
         this.testId = testId;
         this.difficulty = difficulty;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
-
 
     public String getTestId() {
         return this.testId;

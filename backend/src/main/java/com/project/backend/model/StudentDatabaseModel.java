@@ -15,21 +15,21 @@ public class StudentDatabaseModel {
 
     public void storeStudentResponses(Result result) {
         try {
-            
+
             Statement statement = this.database.connection.createStatement();
 
-            for(Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
-                statement.executeUpdate(String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\", NULL);", 
-                    result.getSRN(),
-                    result.getTestId(),
-                    entry.getKey(),
-                    entry.getValue()
-                ));
+            for (Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
+                statement.executeUpdate(
+                        String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\", NULL);",
+                                result.getSRN(),
+                                result.getTestId(),
+                                entry.getKey(),
+                                entry.getValue()));
             }
 
             statement.close();
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
         }
     }
@@ -40,22 +40,21 @@ public class StudentDatabaseModel {
             ResultSet resultSet = null;
             Question question;
             int totalScore = 0;
-            
-            for(Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
-                resultSet = statement.executeQuery(String.format("SELECT * FROM Questions WHERE questionId = \"%s\"", entry.getKey()));
-                while(resultSet.next()) {
+
+            for (Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
+                resultSet = statement.executeQuery(
+                        String.format("SELECT * FROM Questions WHERE questionId = \"%s\"", entry.getKey()));
+                while (resultSet.next()) {
                     question = new Question(
-                        resultSet.getString("questionId"),
-                        resultSet.getString("question"),
-                        resultSet.getString("correct_option"),
-                        resultSet.getInt("marks"),
-                        new ArrayList<String>(Arrays.asList(
-                            resultSet.getString("option1"),
-                            resultSet.getString("option2"),
-                            resultSet.getString("option3"),
-                            resultSet.getString("option4")
-                        ))
-                    );
+                            resultSet.getString("questionId"),
+                            resultSet.getString("question"),
+                            resultSet.getString("correct_option"),
+                            resultSet.getInt("marks"),
+                            new ArrayList<String>(Arrays.asList(
+                                    resultSet.getString("option1"),
+                                    resultSet.getString("option2"),
+                                    resultSet.getString("option3"),
+                                    resultSet.getString("option4"))));
                     totalScore += question.evaluateQuestion(entry.getValue());
                 }
             }
@@ -66,7 +65,7 @@ public class StudentDatabaseModel {
 
             return totalScore;
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             return -1;
         }
@@ -76,15 +75,14 @@ public class StudentDatabaseModel {
         try {
 
             Statement statement = this.database.connection.createStatement();
-            statement.executeUpdate(String.format("INSERT INTO Student_Test VALUES (\"%s\", \"%s\", %d)", 
-                result.SRN,
-                result.testId,
-                result.totalScore
-            ));
+            statement.executeUpdate(String.format("INSERT INTO Student_Test VALUES (\"%s\", \"%s\", %d)",
+                    result.SRN,
+                    result.testId,
+                    result.totalScore));
 
             statement.close();
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
         }
     }
@@ -93,13 +91,13 @@ public class StudentDatabaseModel {
         try {
 
             Statement statement = this.database.connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("SELECT MarksSecured FROM Student_Test WHERE SRN = \"%s\" AND TestID = \"%s\";",
-                SRN,
-                testId
-            ));
+            ResultSet resultSet = statement.executeQuery(
+                    String.format("SELECT MarksSecured FROM Student_Test WHERE SRN = \"%s\" AND TestID = \"%s\";",
+                            SRN,
+                            testId));
             int totalMarks = -1;
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 totalMarks = resultSet.getInt("MarksSecured");
             }
 
@@ -119,12 +117,13 @@ public class StudentDatabaseModel {
         try {
             Statement statement = database.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(
-                "SELECT q.questionid, q.question, q.option1, q.option2, q.option3, q.option4, q.correct_option, sa.markedAnswer,  sa.reviewComments " +
-                "FROM questions q " +
-                "JOIN student_answers sa ON q.questionid = sa.questionid " +
-                "WHERE sa.SRN = (SELECT SRN FROM student WHERE SRN = '" + SRN + "') " +
-                "AND sa.testid = '" + testId + "'");
-    
+                    "SELECT q.questionid, q.question, q.option1, q.option2, q.option3, q.option4, q.correct_option, sa.markedAnswer,  sa.reviewComments "
+                            +
+                            "FROM questions q " +
+                            "JOIN student_answers sa ON q.questionid = sa.questionid " +
+                            "WHERE sa.SRN = (SELECT SRN FROM student WHERE SRN = '" + SRN + "') " +
+                            "AND sa.testid = '" + testId + "'");
+
             while (resultSet.next()) {
                 Map<String, Object> questionDetails = new HashMap<>();
                 questionDetails.put("questionId", resultSet.getString("questionid"));
@@ -148,7 +147,7 @@ public class StudentDatabaseModel {
     public void storeReviewComments(String SRN, String testId, Map<String, String> reviewComments) {
         try {
             String studentid = getStudentId(SRN);
-            System.out.println("HEREE"+SRN+testId+reviewComments);
+            System.out.println("HEREE" + SRN + testId + reviewComments);
             PreparedStatement statement = database.connection.prepareStatement(
                     "UPDATE student_answers SET reviewComments = ? WHERE SRN = ? AND testId = ? AND questionId = ?");
             for (Map.Entry<String, String> entry : reviewComments.entrySet()) {
@@ -165,6 +164,7 @@ public class StudentDatabaseModel {
             e.printStackTrace();
         }
     }
+
     private String getStudentId(String SRN) {
         try {
             Statement statement = database.connection.createStatement();
@@ -182,10 +182,11 @@ public class StudentDatabaseModel {
     public boolean checkStudentSRN(String SRN) {
         try {
             Statement statement = this.database.connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("SELECT SRN FROM Student WHERE SRN = \"%s\"", SRN));
+            ResultSet resultSet = statement
+                    .executeQuery(String.format("SELECT SRN FROM Student WHERE SRN = \"%s\"", SRN));
 
-            while(resultSet.next()) {
-                if(resultSet.getString("SRN").equals(SRN)) {
+            while (resultSet.next()) {
+                if (resultSet.getString("SRN").equals(SRN)) {
                     resultSet.close();
                     statement.close();
                     return true;
@@ -196,7 +197,7 @@ public class StudentDatabaseModel {
             statement.close();
 
             return false;
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             return false;
         }

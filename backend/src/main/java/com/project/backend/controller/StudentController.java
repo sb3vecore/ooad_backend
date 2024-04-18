@@ -26,7 +26,7 @@ public class StudentController {
 
     @GetMapping(path = "/studentDashboard")
     String viewStudentDashboard(@RequestParam String SRN, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
+        if (!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         ArrayList<Test> tests = testDatabaseModel.retrieveAllValidTests(SRN);
@@ -36,7 +36,7 @@ public class StudentController {
 
     @GetMapping(path = "/takeTest")
     String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
+        if (!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         Test test = testDatabaseModel.getTestDetails(testId);
@@ -48,8 +48,9 @@ public class StudentController {
     @PostMapping(path = "/submitStudentTest")
     String submitStudentTest(@RequestBody Map<String, Object> body, Model model) {
         System.out.println(body);
-        
-        Result result = new Result((String)body.get("SRN"), (String)body.get("testId"), (Map<String, String>)body.get("markedOptions"));
+
+        Result result = new Result((String) body.get("SRN"), (String) body.get("testId"),
+                (Map<String, String>) body.get("markedOptions"));
         studentDatabaseModel.storeStudentResponses(result);
         studentDatabaseModel.calculateStudentTotal(result);
         studentDatabaseModel.storeTestResult(result);
@@ -58,7 +59,7 @@ public class StudentController {
 
     @GetMapping(path = "/viewPreviousTests")
     String viewPreviousTests(@RequestParam String SRN, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
+        if (!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         PrevTests prevTests = new PrevTests();
@@ -69,7 +70,7 @@ public class StudentController {
 
     @GetMapping(path = "/viewTestResult")
     String viewTestResult(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
+        if (!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         model.addAttribute("testResult", this.studentDatabaseModel.getTestResult(SRN, testId));
@@ -78,7 +79,7 @@ public class StudentController {
 
     @GetMapping(path = "/reviewTest")
     public String reviewTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
+        if (!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         List<Map<String, Object>> testDetails = studentDatabaseModel.getTestDetails(SRN, testId);
@@ -97,6 +98,3 @@ public class StudentController {
     }
 
 }
-
-
-
