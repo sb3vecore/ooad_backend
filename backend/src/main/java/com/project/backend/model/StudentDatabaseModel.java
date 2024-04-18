@@ -19,12 +19,11 @@ public class StudentDatabaseModel {
             Statement statement = this.database.connection.createStatement();
 
             for(Map.Entry<String, String> entry : result.getMarkedOptions().entrySet()) {
-                statement.executeUpdate(String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\");", 
+                statement.executeUpdate(String.format("INSERT INTO Student_Answers VALUES (\"%s\", \"%s\", \"%s\", \"%s\", NULL);", 
                     result.getSRN(),
                     result.getTestId(),
                     entry.getKey(),
-                    entry.getValue(),
-                    "None"
+                    entry.getValue()
                 ));
             }
 
@@ -178,6 +177,29 @@ public class StudentDatabaseModel {
             e.printStackTrace();
         }
         return "Failed";
+    }
+
+    public boolean checkStudentSRN(String SRN) {
+        try {
+            Statement statement = this.database.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(String.format("SELECT SRN FROM Student WHERE SRN = \"%s\"", SRN));
+
+            while(resultSet.next()) {
+                if(resultSet.getString("SRN").equals(SRN)) {
+                    resultSet.close();
+                    statement.close();
+                    return true;
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+
+            return false;
+        } catch(Exception exception) {
+            System.out.println(exception);
+            return false;
+        }
     }
 
 }

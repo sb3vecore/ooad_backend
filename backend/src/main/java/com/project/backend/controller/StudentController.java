@@ -26,7 +26,7 @@ public class StudentController {
 
     @GetMapping(path = "/studentDashboard")
     String viewStudentDashboard(@RequestParam String SRN, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN"))) {
+        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         ArrayList<Test> tests = testDatabaseModel.retrieveAllValidTests(SRN);
@@ -36,7 +36,7 @@ public class StudentController {
 
     @GetMapping(path = "/takeTest")
     String takeTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN"))) {
+        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         Test test = testDatabaseModel.getTestDetails(testId);
@@ -58,7 +58,7 @@ public class StudentController {
 
     @GetMapping(path = "/viewPreviousTests")
     String viewPreviousTests(@RequestParam String SRN, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN"))) {
+        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         PrevTests prevTests = new PrevTests();
@@ -69,7 +69,7 @@ public class StudentController {
 
     @GetMapping(path = "/viewTestResult")
     String viewTestResult(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN"))) {
+        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         model.addAttribute("testResult", this.studentDatabaseModel.getTestResult(SRN, testId));
@@ -78,17 +78,15 @@ public class StudentController {
 
     @GetMapping(path = "/reviewTest")
     public String reviewTest(@RequestParam String SRN, @RequestParam String testId, Model model, HttpSession session) {
-        if(!SRN.equals(session.getAttribute("SRN"))) {
+        if(!SRN.equals(session.getAttribute("SRN")) || !this.studentDatabaseModel.checkStudentSRN(SRN)) {
             return "invalidSession";
         }
         List<Map<String, Object>> testDetails = studentDatabaseModel.getTestDetails(SRN, testId);
         model.addAttribute("testDetails", testDetails);
         return "reviewTest";
-
-    
-        
     }
 
+    @SuppressWarnings("unchecked")
     @PostMapping(path = "/saveReviewComments")
     public String saveReviewComments(@RequestBody Map<String, Object> body) {
         String SRN = (String) body.get("SRN");

@@ -25,15 +25,16 @@ public class TeacherController {
 
     @GetMapping(path = "/teacherDashboard")
     String viewTeacherDashboard(@RequestParam String teacherId, Model model, HttpSession session) {
-        if(!teacherId.equals(session.getAttribute("teacherId"))) {
+        if(!teacherId.equals(session.getAttribute("teacherId")) || !this.testDatabaseModel.checkTeacherId(teacherId)) {
             return "invalidSession";
         }
+        model.addAttribute("teacherId", teacherId);
         return "teacherDashboard";
     }
 
     @GetMapping(path = "/uploadTest")
     String uploadTest(@RequestParam String teacherId, Model model, HttpSession session) {
-        if(!teacherId.equals(session.getAttribute("teacherId"))) {
+        if(!teacherId.equals(session.getAttribute("teacherId")) || !this.testDatabaseModel.checkTeacherId(teacherId)) {
             return "invalidSession";
         }
         return "uploadTest";
