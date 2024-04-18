@@ -58,7 +58,7 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.reload();
+                    window.location.href = `/studentDashboard?SRN=${SRN}`;
                 } else {
                     console.error('Failed to save review comments');
                 }

@@ -51,6 +51,11 @@
       </tbody>
     </table>
 
+    <form th:action="@{/undoUpdateTest}" method="post">
+      <button class="btn btn-dark"> Undo Previous Update </button>
+    </form>
+
+
     <h1>Accepted Tests</h1>
     <!-- Add Bootstrap classes to your table -->
     <table class="table bg-custom table-striped">
@@ -75,7 +80,7 @@
           <td th:text="${data[3]}"></td>
 
           <td>
-            <form th:action="@{/updateForm}" method="get">
+            <form th:action="@{/undoAcceptTest}" method="post">
               <input type="hidden" name="testId" th:value="${data[0]}" />
               <button type="submit" class="btn btn-dark">Undo</button>
             </form>
@@ -83,6 +88,8 @@
         </tr>
       </tbody>
     </table>
+
+
 
     <!-- Add Bootstrap JS -->
     <style>

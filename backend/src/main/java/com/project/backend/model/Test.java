@@ -47,6 +47,14 @@ public class Test {
         this.questionList = questionList;
     }
 
+    public Test(String testId, String difficulty, String startDateTime, String endDateTime) { //for undo functionality
+        this.testId = testId;
+        this.difficulty = difficulty;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+    }
+
+
     public String getTestId() {
         return this.testId;
     }
