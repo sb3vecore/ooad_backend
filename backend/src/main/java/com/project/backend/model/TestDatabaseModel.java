@@ -184,4 +184,48 @@ public class TestDatabaseModel {
         }
     }
 
+    public ArrayList<StudentReview> getStudentReviews(Test test) {
+        try {
+
+            Statement statement = this.database.connection.createStatement();
+            ResultSet resultSet;
+            ArrayList<String> SRNs;
+            ArrayList<String> reviews;
+            StudentReview studentReview;
+            ArrayList<StudentReview> studentReviews = new ArrayList<StudentReview>();
+
+            for(int i = 0; i < test.getQuestionList().size(); i++) {
+                SRNs = new ArrayList<String>();
+                reviews = new ArrayList<String>();
+                studentReview = new StudentReview(test.getTestId(), test.getQuestionList().get(i).getQuestionId(), SRNs, reviews);
+
+                resultSet = statement.executeQuery(String.format(
+                "SELECT SRN, reviewComments FROM Student_Answers WHERE testId = \"%s\" AND questionId = \"%s\"",
+                    test.getTestId(),
+                    test.getQuestionList().get(i).getQuestionId()
+                ));
+
+                while(resultSet.next()) {
+                    if(!resultSet.getString("reviewComments").equals("none")) {
+                        studentReview.addSRN(resultSet.getString("SRN"));
+                        studentReview.addReview(resultSet.getString("reviewComments"));
+                    }
+                }
+
+                studentReviews.add(studentReview);
+                resultSet.close();
+            }
+
+
+            statement.close();
+
+            return studentReviews;
+            
+
+        } catch(Exception exception) {
+            System.out.println(exception);
+            return null;
+        }
+    }
+
 }

@@ -29,9 +29,11 @@ import jakarta.servlet.http.HttpSession;
 public class TeacherController {
 
     TestDatabaseModel testDatabaseModel = null;
+    TeacherDatabaseModel teacherDatabaseModel = null;
 
     TeacherController() {
-        testDatabaseModel = new TestDatabaseModel();
+        this.testDatabaseModel = new TestDatabaseModel();
+        this.teacherDatabaseModel = new TeacherDatabaseModel();
     }
     
     @GetMapping(path = "/teacherDashboard")
@@ -40,6 +42,7 @@ public class TeacherController {
             return "invalidSession";
         }
         model.addAttribute("teacherId", teacherId);
+        model.addAttribute("testIds", this.teacherDatabaseModel.getTeacherTests(teacherId));
         return "teacherDashboard";
     }
 
@@ -114,4 +117,16 @@ public class TeacherController {
         return modelAndView;
     }
 
+    @GetMapping(path = "/seeTestReview")
+    String seeTestReview(@RequestParam String teacherId, @RequestParam String testId, Model model, HttpSession session) {
+        if(!teacherId.equals(session.getAttribute("teacherId")) || !this.testDatabaseModel.checkTeacherId(teacherId)) {
+            return "invalidSession";
+        }
+        Test test = this.testDatabaseModel.getTestDetails(testId);
+        ArrayList<StudentReview> studentReviews = this.testDatabaseModel.getStudentReviews(test);
+        model.addAttribute("test", test);
+        model.addAttribute("studentReviews", studentReviews);
+        System.out.println(test.getQuestionList());
+        return "seeTestReview";
+    }
 }

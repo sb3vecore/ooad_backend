@@ -16,8 +16,9 @@
         }
 
         .button-container {
-            text-align: center;
-            margin-bottom: 20px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
         }
 
         .button-container button {
@@ -31,6 +32,7 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         .button-container button:hover {
@@ -87,10 +89,9 @@
             const splitEndTime = endTime.split(":")
 
             const totalStartSeconds = (splitStartTime[0] * 3600) + (splitStartTime[1] * 60) + (splitStartTime[2] * 1)
-            // const totalEndSeconds = (splitEndTime[0] * 3600) + (splitEndTime[1] * 60) + (splitEndTime[2] * 1)
-            // const testTime = totalEndSeconds - totalStartSeconds;
-
             const date = new Date()
+            const currentYear = date.getFullYear()
+            const currentMonth = date.getMonth() + 1
             const currentDay = date.getDate()
             const currentHour = date.getHours()
             const currentMinute = date.getMinutes()
@@ -99,15 +100,27 @@
 
             const timeDifference = totalCurrentSeconds - totalStartSeconds
 
-            if(currentDay < parseInt(splitStartDate[2])) {
+            if(currentYear < parseInt(splitStartDate[0])) {
                 alert("Early")
-            } else if(currentDay === parseInt(splitStartDate[2])) {
-                if(timeDifference < 0) {
+            } else if(currentYear === parseInt(splitStartDate[0])) {
+                if(currentMonth < parseInt(splitStartDate[1])) {
                     alert("Early")
-                } else if(timeDifference >= 0 && timeDifference <= 1800) {
-                    const parameters = new URLSearchParams(window.location.search)
-                    const SRN = parameters.get("SRN")
-                    window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`)
+                } else if(currentMonth === parseInt(splitStartDate[1])) {
+                    if(currentDay < parseInt(splitStartDate[2])) {
+                        alert("Early")
+                    } else if(currentDay === parseInt(splitStartDate[2])) {
+                        if(timeDifference < 0) {
+                            alert("Early")
+                        } else if(timeDifference >= 0 && timeDifference <= 1800) {
+                            const parameters = new URLSearchParams(window.location.search)
+                            const SRN = parameters.get("SRN")
+                            window.location.assign(`http://${window.location.host}/takeTest?SRN=${SRN}&testId=${event.target.id}`)
+                        } else {
+                            alert("Late")
+                        }
+                    } else {
+                        alert("Late")
+                    }
                 } else {
                     alert("Late")
                 }
@@ -122,11 +135,17 @@
             const SRN = parameters.get("SRN");
             window.location.assign(`http://${window.location.host}/viewPreviousTests?SRN=${SRN}`);
         }
+
+        const handleLogout = (event) => {
+            window.location.assign(`http://${window.location.host}/`)
+        }
     </script>
 </head>
 <body>
     <h1>Student Dashboard</h1>
     <div class="button-container">
+        <button onclick="handleLogout(event)">Logout</button>
+        <br>
         <button onclick="viewPreviousTests()">View Previous Tests</button>
     </div>
     <div th:each="test: ${tests}">
@@ -136,7 +155,7 @@
             <p>Start Time: <span th:text="${test.startDateTime}"></span></p>
             <p>End Time: <span th:text="${test.endDateTime}"></span></p>
             <p th:text="${test.description}"></p>
-            <button th:id="${test.testId}" th:attr = "onclick = |handleTakeTest(event, '${test.getStartDateTime()}', '${test.getEndDateTime()}')|">Take Test</button>
+            <button th:id="${test.testId}" th:attr="onclick=|handleTakeTest(event, '${test.getStartDateTime()}', '${test.getEndDateTime()}')|">Take Test</button>
         </div>
     </div>
 </body>

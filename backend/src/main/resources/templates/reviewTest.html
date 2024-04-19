@@ -46,7 +46,11 @@
             const reviewComments = {};
             const commentInputs = document.querySelectorAll('input[name="reviewComments"]');
             commentInputs.forEach(input => {
-                reviewComments[input.id] = input.value;
+                if(input.value !== "") {
+                    reviewComments[input.id] = input.value;
+                } else {
+                    reviewComments[input.id] = "none";
+                }
             });
 
             fetch('/saveReviewComments', {
